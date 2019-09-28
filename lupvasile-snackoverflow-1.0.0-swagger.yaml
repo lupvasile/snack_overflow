@@ -1,0 +1,600 @@
+swagger: '2.0'
+info:
+  description: |
+    This is a the API for SnackOverflow
+  version: 1.0.0
+  title: Snack Overflow
+  contact:
+    email: vasile_lup2006@yahoo.com
+# host: petstore.swagger.io
+# basePath: /v2
+tags:
+- name: questions
+  description: everything about the questions
+- name: answers
+  description: everything about the answers
+- name: users
+# schemes:
+# - http
+paths:
+  /questions:
+    get:
+      tags:
+      - questions
+      summary: Returns all questions
+      operationId: getAllQuestions
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+              
+    post:
+      tags:
+      - questions
+      summary: Add a new question
+      operationId: addQuestion
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Question object that needs to be added
+        required: true
+        schema:
+          $ref: '#/definitions/Question'
+      responses:
+        400:
+          description: Invalid input
+        201:
+          description: created
+  
+  /questions/{questionId}:
+    get:
+      tags:
+      - questions
+      summary: Get question by ID
+      description: Returns a single question
+      operationId: getQuestionById
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question to return
+        required: true
+        type: integer
+        format: int32
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          description: Invalid questionId supplied
+        404:
+          description: Question not found
+          
+    put:
+      tags:
+      - questions
+      summary: Update question
+      operationId: updateQuestion
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: id of question that needs to be updated
+        required: true
+        type: integer
+        format: int32
+      - in: body
+        name: body
+        description: Updated question object
+        required: true
+        schema:
+          $ref: '#/definitions/Question'
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          description: Invalid question supplied
+        404:
+          description: Question not found
+        403:
+          description: not enough permissions
+    
+    delete:
+      tags:
+      - questions
+      summary: Delete question
+      operationId: deleteQuestion
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: The id of question that needs to be deleted
+        required: true
+        type: string
+      responses:
+        400:
+          description: Invalid questionId supplied
+        404:
+          description: Question not found
+        403:
+          description: not enough permissions
+
+  /questions/{questionId}/votes:
+    post:
+      tags:
+      - questions
+      summary: Vote question
+      operationId: addQuestionVote
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question to vote
+        required: true
+        type: integer
+        format: int32
+      responses:
+        201: 
+          description: voted
+        409:
+          description: vote already existent
+
+  /questions/{questionId}/answers:
+    get:
+      tags:
+      - answers
+      summary: Returns all answers for a question
+      operationId: getAllAnswersForQuestion
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question for which the answers are returned
+        required: true
+        type: integer
+        format: int32
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+
+    post:
+      tags:
+      - answers
+      summary: Add a new answer
+      operationId: addAnswer
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question for which the answer is added
+        required: true
+        type: integer
+        format: int32
+      - in: body
+        name: body
+        description: Answer object that needs to be added
+        required: true
+        schema:
+          $ref: '#/definitions/Answer'
+      responses:
+        400:
+          description: Invalid input
+        201:
+          description: created
+  
+
+  
+  /questions/{questionId}/answers/{answerId}:
+    get:
+      tags:
+      - answers
+      summary: Get answer by ID
+      description: Returns a single answer
+      operationId: getAnswerById
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question to which has the answer
+        required: true
+        type: integer
+        format: int32
+      - name: answerId
+        in: path
+        description: ID of the answer
+        required: true
+        type: integer
+        format: int32
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Answer'
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Answer not found
+          
+    put:
+      tags:
+      - answers
+      summary: Update answer
+      operationId: updateAnswer
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question to which has the answer
+        required: true
+        type: integer
+        format: int32
+      - name: answerId
+        in: path
+        description: ID of the answer
+        required: true
+        type: integer
+        format: int32
+      - in: body
+        name: body
+        description: Updated answer object
+        required: true
+        schema:
+          $ref: '#/definitions/Answer'
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Answer'
+        400:
+          description: Invalid answer supplied
+        404:
+          description: Answer not found
+        403:
+          description: not enough permissions
+    
+    
+    delete:
+      tags:
+      - answers
+      summary: Delete answer
+      operationId: deleteAnswer
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question to which has the answer
+        required: true
+        type: integer
+        format: int32
+      - name: answerId
+        in: path
+        description: ID of the answer
+        required: true
+        type: integer
+        format: int32
+      responses:
+        400:
+          description: Invalid answer supplied
+        404:
+          description: Answer not found
+        403:
+          description: not enough permissions
+  
+  /questions/{questionId}/answers/{answerId}/votes:
+    post:
+      tags:
+      - answers
+      summary: Vote answer
+      operationId: addAnswerVote
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: questionId
+        in: path
+        description: ID of question to which has the answer
+        required: true
+        type: integer
+        format: int32
+      - name: answerId
+        in: path
+        description: ID of the answer
+        required: true
+        type: integer
+        format: int32
+      responses:
+        201: 
+          description: voted
+        409:
+          description: vote already existent
+  
+  /questions/tags:
+    get:
+      tags:
+      - questions
+      summary: Returns all question tags
+      operationId: getAllTags
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: string
+
+  /questions/findByTags:
+    get:
+      tags:
+      - questions
+      summary: Finds questions by tags
+      description: Muliple tags can be provided with comma separated strings. Use\
+        \ tag1, tag2, tag3 for testing.
+      operationId: findQuestionsByTags
+      produces:
+      - application/json
+      parameters:
+      - name: tags
+        in: query
+        description: Tags to filter by
+        required: true
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          description: Invalid tag value
+          
+  /questions/findByTitle:
+    get:
+      tags:
+      - questions
+      summary: Finds questions by title
+      operationId: findQuestionsByTitle
+      produces:
+      - application/json
+      parameters:
+      - name: title
+        in: query
+        description: Title to filter by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          description: Invalid tag value
+  
+  /users/login:
+    get:
+      tags:
+      - users
+      summary: Logs user into the system
+      operationId: loginUser
+      produces:
+      - application/json
+      parameters:
+      - name: username
+        in: query
+        description: The user name for login
+        required: true
+        type: string
+      - name: password
+        in: query
+        description: The password for login in clear text
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: string
+          headers:
+            X-Rate-Limit:
+              type: integer
+              format: int32
+              description: calls per hour allowed by the user
+            X-Expires-After:
+              type: string
+              format: date-time
+              description: date in UTC when token expires
+        400:
+          description: Invalid username/password supplied
+  /users/logout:
+    get:
+      tags:
+      - users
+      summary: Logs out current logged in user session
+      operationId: logoutUser
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  
+  /users:
+    get:
+      tags:
+      - users
+      summary: Returns all users
+      operationId: getAllUsers
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        403:
+          description: not enough permissions
+  
+  
+  /users/{userId}/ban:                
+    post:
+      tags:
+      - users
+      summary: Ban user by userId
+      operationId: banUserById
+      produces:
+      - application/xml
+      parameters:
+      - name: userId
+        in: path
+        description: The id of the user to be banned.
+        required: true
+        type: integer
+        format: int32
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid userId supplied
+        404:
+          description: User not found
+        403:
+          description: not enough permissions
+  
+      
+
+definitions:
+  Question:
+    type: object
+    required:
+    - id
+    - author
+    properties:
+      id:
+        type: integer
+        format: int32
+      author:
+        $ref: '#/definitions/UserData'
+      title:
+        type: string
+        example: question title 1
+      text:
+        type: string
+        example: question text 1
+      creationDateTine:
+        type: string
+        format: date-time
+        example: "02/02/02-14:00"
+      tags:
+        type: array
+        items:
+          type: string
+          example: [tag1, tag2]
+      voteCount:
+        type: integer
+        format: int32
+        example: 3
+  Answer:
+    type: object
+    required:
+    - id
+    - author
+    - questionId
+    properties:
+      id:
+        type: integer
+        format: int32
+      author:
+        $ref: '#/definitions/UserData'
+      text:
+        type: string
+        example: answer text 1
+      creationDateTine:
+        type: string
+        format: date-time
+        example: "02/02/02-14:00"
+      questionId:
+        type: integer
+        format: int32
+      voteCount:
+        type: integer
+        format: int32
+        example: -3
+  
+  UserData:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      username:
+        type: string
+      score:
+        type: integer
+        format: int32
+        
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      username:
+        type: string
+      password:
+        type: string
+      score:
+        type: integer
+        format: int32
+      isModerator:
+        type: boolean
+      isBlocked:
+        type: boolean
+  
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /lupvasile/snackoverflow/1.0.0
+schemes:
+ - https
+ - http

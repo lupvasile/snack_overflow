@@ -1,0 +1,578 @@
+{
+	"info": {
+		"_postman_id": "69f57753-772d-472d-8056-7066253f00bc",
+		"name": "SnackOverflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c0a9eaa3-4e7e-4835-9a3a-79838b2f9c47",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"correct user is received\", function() {",
+							"   var user = pm.response.json();",
+							"   pm.expect(user.username).to.be.equal(\"u1\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"answer text 100\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb614f3d-0eb5-4691-8b59-702781f5ae96",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"can receive users\", function() {",
+							"   var users = pm.response.json();",
+							"   pm.expect(users.length).to.be.gt(2);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"answer text 100\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add answer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3d37884f-80db-4a14-91d8-a0943c28b10e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d8e72a89-e8f5-49fa-9e02-5b6269bf6c2e",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"can receive users\", function() {",
+							"   var answer = pm.response.json();",
+							"   pm.expect(answer.text).to.be.equal(\"answer text test\")",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"answer text test\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions/2/answers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions",
+						"2",
+						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete answer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "49b8f19f-c433-4545-b81d-81c93c5ecb3c",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status to be 400\", function() {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"error type is AnswerNotFoundException\", function() {",
+							"   var error = pm.response.json();",
+							"   pm.expect(error.type).to.be.equal(\"AnswerNotFoundException\")",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions/1/answers/3000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions",
+						"1",
+						"answers",
+						"3000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all questions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c8826b3d-c5fe-4b0c-b4f6-fdaa119a416e",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"can receive questions\", function() {",
+							"   var questions = pm.response.json();",
+							"   pm.expect(questions.length).to.be.equal(3);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"answer text 100\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all tags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "80f46c01-308d-497d-8f99-a64be3138178",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"can receive tags\", function() {",
+							"   var tags = pm.response.json();",
+							"   pm.expect(tags.length).to.be.gt(2);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"answer text 100\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions/tags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33515174-cff6-423c-b896-1dfa03b7c1ed",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"can update question\", function() {",
+							"   var question = pm.response.json();",
+							"   pm.expect(question.title).to.be.equal(\"updated title\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 1,\r\n  \"title\": \"updated title\",\r\n  \"text\": \"newText\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter by title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "00795418-1bba-43b4-8058-2e9920186478",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response status is OK\", function() {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"can filter by title\", function() {",
+							"   var q = pm.response.json();",
+							"   pm.expect(q.length).to.be.equal(0);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/questions/findByTitle/q123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions",
+						"findByTitle",
+						"q123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vote answer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ca46c860-e011-4232-828f-e1acd4380edd",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"can vote answer\", function() {",
+							"    pm.response.to.be.ok;",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "u2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t3\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions/1/answers/3/votes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions",
+						"1",
+						"answers",
+						"3",
+						"votes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
